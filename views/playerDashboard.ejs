@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SportSpots </title>
+    <link rel="stylesheet" href="css/playerDashboard.css" />
+  </head>
+  <body>
+    <nav class="top-bar">
+      <h1>SportSpots </h1>
+      <a href="/logout" >
+        <button class="Btn">
+          <div class="sign">
+            <svg viewBox="0 0 512 512">
+              <path
+                d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"
+              ></path>
+            </svg>
+          </div>
+          <div class="text">Logout</div>
+        </button>
+      </a>
+    </nav>
+
+    <div class="main-content">
+      <div class="sports-container">
+        <h1>Welcome <span><%= user || 'Player' %></span></h1>
+
+        <!-- Available Sports Section -->
+        <div class="sports-section">
+          <div class="section-header">
+            <h2>Available Sports</h2>
+            <span class="toggle-icon">
+              <img src="/assets/up-arrow.png" alt="Toggle" />
+            </span>
+                      </div>
+          <div class="section-content">
+            <% let availableEvents = events.filter(event =>
+            !joinedEvents.find(je => je._id.toString() ===
+            event._id.toString())); %> <% if (availableEvents.length > 0) { %>
+            <ul>
+              <% availableEvents.forEach(event => { %>
+              <li>
+                <div class="event-name"><%= event.name %></div>
+                <div class="event-date"><%= event.date %></div>
+                <p class="event-description"><%= event.description %></p>
+                <form action="/join-event/<%= event._id %>" method="POST">
+                  <button type="submit" class="join-btn">Join Event</button>
+                </form>
+              </li>
+              <% }) %>
+            </ul>
+            <% } else { %>
+            <p class="no-events">No available events at the moment.</p>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Joined Sports Section -->
+        <div class="sports-section">
+          <div class="section-header">
+            <h2>Joined Sports</h2>
+            <span class="toggle-icon">
+              <img src="/assets/up-arrow.png" alt="Toggle" />
+            </span>
+                      </div>
+          <div class="section-content">
+            <% if (joinedEvents.length > 0) { %>
+            <ul>
+              <% joinedEvents.forEach(event => { %>
+              <li>
+                <div class="event-name"><%= event.name %></div>
+                <div class="event-date"><%= event.date %></div>
+                <p class="event-description"><%= event.description %></p>
+                <form action="/leave-event/<%= event._id %>" method="POST">
+                  <button type="submit" class="leave-btn">Leave Event</button>
+                </form>
+              </li>
+              <% }) %>
+            </ul>
+            <% } else { %>
+            <p class="no-events">You haven't joined any events yet.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Initialize sections as expanded
+      document.querySelectorAll('.section-content').forEach((content) => {
+        content.classList.add('active');
+      });
+
+      document.querySelectorAll('.section-header').forEach((header) => {
+        header.addEventListener('click', () => {
+          const content = header.nextElementSibling;
+          content.classList.toggle('active');
+      
+          // Get the toggle image element
+          const icon = header.querySelector('.toggle-icon img');
+      
+          // Toggle the image source
+          if (content.classList.contains('active')) {
+            icon.src = '/assets/up-arrow.png'; // Change to up-arrow when expanded
+          } else {
+            icon.src = '/assets/down-arrow.png'; // Change to down-arrow when collapsed
+          }
+        });
+      });
+      
+    </script>
+  </body>
+</html>
