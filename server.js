@@ -68,6 +68,10 @@ app.use('/', authRoutes);
 app.use('/', dashboardRoutes);
 app.use('/', eventRoutes);
 
+app.get('/', (req, res) => {
+  res.render('login'); // Make sure `views/index.ejs` exists
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
