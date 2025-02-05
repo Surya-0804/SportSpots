@@ -2,10 +2,7 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 5000, // Timeout if MongoDB is unreachable
-      bufferCommands: false, // Prevents Mongoose from buffering queries
-    });
+    await mongoose.connect(process.env.MONGO_URI);
 
     console.log('✅ MongoDB Atlas Connected...');
   } catch (err) {
